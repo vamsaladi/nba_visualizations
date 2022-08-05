@@ -27,7 +27,6 @@ def loadFileRows(fileName):
         line_num = 0
         for row in csv_reader:
             if line_num == 0:
-                print(f'Column Names: {", ".join(row)}')
                 line_num += 1
             else:
                 rows.append(row)
@@ -35,10 +34,15 @@ def loadFileRows(fileName):
         print(f"Read {line_num} lines!")
     return rows
 
-def formatSalaryFile(fileName):
+def rewriteSalaryFile(fileName, flag):
     """Format 2020 to 2021 csv file appropriately, deleting unneccessary columns
     and formatting the salary and other quoted numbers appropriately. Function will
     rewrite the file and save it as a clean version in the same folder.
+
+    Flag:
+        - Flag 1: 1999 to 2019 file
+        - Flag 2: 2020 to 2021 file
+        - Flag 3: 2021 to 2022 file
 
     Parameters
     ----------
@@ -59,9 +63,46 @@ def formatSalaryFile(fileName):
     newRows = []
     if rows == 0:
         return 0
-    for i in range(len(rows)):
-        salary = rows[i][3].strip()
-        if salary[0] == "$":
-            salary = salary[1:]
-        newRows.append([i+1, rows[i][0], rows[i][2], salary])
-    return newRows
+
+    if flag == 1: #### 1999 to 2019 file
+        for i in range(len(rows)):
+            if int(rows[i][-1]) < 2013:
+                continue
+            else:
+                rows[i][-2] = float(rows[i][-2])
+                newRows.append(rows[i])
+        newFileName = fileName[:-4] + '_clean.csv'
+        with open(newFileName, 'w') as newFile:
+            csvwriter = csv.writer(newFile, delimiter=",")
+            for row in newRows:
+                csvwriter.writerow(row)
+        return newRows
+
+    if flag == 2: ### 2020 to 2021 file
+        for i in range(len(rows)):
+            salary = rows[i][3].strip()
+            if salary[0] == "$":
+                salary = salary[1:]
+            salary = float("".join(salary.split(",")))
+            newRows.append([i+1, rows[i][0], rows[i][2], salary])
+        newFileName = fileName[:-4] + '_clean.csv'
+        with open(newFileName, 'w') as newFile:
+            csvwriter = csv.writer(newFile, delimiter=",")
+            for row in newRows:
+                csvwriter.writerow(row)
+        return newRows
+
+    if flag == 3: #### 2021 to 2022 file
+        for i in range(len(rows)):
+            salary = rows[i][3].strip()
+            if salary == "" or salary == " ":
+                salary = "0"
+            if salary[0] == "$":
+                salary = float(salary[1:])
+            newRows.append([rows[i][0], rows[i][1], rows[i][2], salary])
+        newFileName = fileName[:-4] + '_clean.csv'
+        with open(newFileName, 'w') as newFile:
+            csvwriter = csv.writer(newFile, delimiter=",")
+            for row in newRows:
+                csvwriter.writerow(row)
+        return newRows
