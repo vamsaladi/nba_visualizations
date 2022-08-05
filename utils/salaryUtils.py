@@ -1,7 +1,6 @@
 import os
-import sys
 import csv
-import pandas as pd
+
 
 def loadFileRows(fileName):
     """Load a file as an array, where each element is a row
@@ -34,10 +33,12 @@ def loadFileRows(fileName):
         print(f"Read {line_num} lines!")
     return rows
 
+
 def rewriteSalaryFile(fileName, flag):
-    """Format 2020 to 2021 csv file appropriately, deleting unneccessary columns
-    and formatting the salary and other quoted numbers appropriately. Function will
-    rewrite the file and save it as a clean version in the same folder.
+    """Format 2020 to 2021 csv file appropriately, deleting unneccessary 
+    columns and formatting the salary and other quoted numbers 
+    appropriately. Function will rewrite the file and save it as a clean 
+    version in the same folder.
 
     Flag:
         - Flag 1: 1999 to 2019 file
@@ -64,7 +65,7 @@ def rewriteSalaryFile(fileName, flag):
     if rows == 0:
         return 0
 
-    if flag == 1: #### 1999 to 2019 file
+    if flag == 1:  # 1999 to 2019 file
         for i in range(len(rows)):
             if int(rows[i][-1]) < 2013:
                 continue
@@ -78,13 +79,13 @@ def rewriteSalaryFile(fileName, flag):
                 csvwriter.writerow(row)
         return newRows
 
-    if flag == 2: ### 2020 to 2021 file
+    if flag == 2:  # 2020 to 2021 file
         for i in range(len(rows)):
             salary = rows[i][3].strip()
             if salary[0] == "$":
                 salary = salary[1:]
             salary = float("".join(salary.split(",")))
-            newRows.append([i+1, rows[i][0], rows[i][2], salary])
+            newRows.append([i + 1, rows[i][0], rows[i][2], salary])
         newFileName = fileName[:-4] + '_clean.csv'
         with open(newFileName, 'w') as newFile:
             csvwriter = csv.writer(newFile, delimiter=",")
@@ -92,7 +93,7 @@ def rewriteSalaryFile(fileName, flag):
                 csvwriter.writerow(row)
         return newRows
 
-    if flag == 3: #### 2021 to 2022 file
+    if flag == 3:  # 2021 to 2022 file
         for i in range(len(rows)):
             salary = rows[i][3].strip()
             if salary == "" or salary == " ":
