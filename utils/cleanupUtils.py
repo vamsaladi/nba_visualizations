@@ -1,9 +1,6 @@
 import os
-import sys
 import csv
-import pandas as pd
 
-########## LOAD FILE ##########
 
 def loadFileRows(fileName):
     """Load a file as an array, where each element is a row
@@ -36,6 +33,7 @@ def loadFileRows(fileName):
                 line_num += 1
         print(f"Read {line_num} lines!")
     return rows
+
 
 def fillInBlanks(fileName):
     """Fill in the blank entries in the file with 0.0 so there are no
@@ -73,6 +71,7 @@ def fillInBlanks(fileName):
     print(f"Total entries filled: {entriesFilled}")
     return rows
 
+
 def collapseData(fileName):
     """Dataset from Basketball Reference contains multiple rows for players
     traded midway through a season. This function will collapse the table so
@@ -94,11 +93,12 @@ def collapseData(fileName):
         convenience. Additionally, each player is guaranteed to have only row
 
     None
-        The function will also **EDIT** the original file such that multiple rows
-        are erased. This will be not be a return of the function but will happen
-        behind the scenes.
+        The function will also **EDIT** the original file such that multiple 
+        rows are erased. This will be not be a return of the function but 
+        will happen behind the scenes.
 
-        Additionally, the function will return 0 if there is an error at any point
+        Additionally, the function will return 0 if there is an error at any
+        point
 
     """
     rows = fillInBlanks(fileName)
@@ -106,7 +106,7 @@ def collapseData(fileName):
         return 0
     newRows = [rows[0]]
     for i in range(1, len(rows)):
-        if rows[i][0] == rows[i-1][0]:
+        if rows[i][0] == rows[i - 1][0]:
             continue
         else:
             newRows.append(rows[i])
