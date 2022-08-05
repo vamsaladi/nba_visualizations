@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import sys
-from cleanupUtils import *
+from utils.cleanupUtils import *
 
 folders = ['season_stats_data/', 'advanced_stats_data/']
 
